@@ -1,0 +1,27 @@
+{
+	"name" : "fgsl/rest",
+	"description" : "Fgsl RESTful Requester",
+	"type" : "component",
+	"keywords" : [
+		"http",
+		"request",
+		"rest"
+	],
+	"homepage" : "https://github.com/fgsl/rest",
+	"license" : "AGPL-3.0-only",
+	"autoload" : {
+		"psr-4" : {
+			"Fgsl\\Rest\\" : "src/Fgsl/Rest",
+			"Fgsl\\Test\\Rest\\" : "tests/Fgsl/Rest"
+		}
+	},
+	"require" : {
+		"php" : ">=8.1",
+		"ext-curl": "*",
+		"phpunit/phpunit" : "^10.4",
+		"fgsl/http": "^1.4"
+	},
+	"config" : {
+		"secure-http" : false
+	}
+}
