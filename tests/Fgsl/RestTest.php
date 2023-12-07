@@ -50,6 +50,20 @@ class RestTest extends TestCase
         $this->assertStringContainsString('createdAt', $response);
     }
 
+    public function testPut()
+    {
+        $rest = new Rest();
+
+        $data = [
+            'name' => 'morpheus',
+            'job' => 'general'
+        ];
+        
+        @$response = $rest->doPut($data, [],'https://reqres.in/api/users/2',201);
+        
+        $this->assertStringContainsString('updatedAt', $response);
+    }
+
     public function testPatch()
     {
         $rest = new Rest();

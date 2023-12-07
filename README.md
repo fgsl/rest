@@ -1,6 +1,12 @@
 # FGSL rest
 Component to make HTTP requests and test RESTful APIs
 
+## How to install
+
+```shell
+composer require fgsl/rest
+```
+
 ## How to instance
 
 ```php
@@ -8,6 +14,7 @@ use Fgsl\Rest\Rest;
 
 $rest = new Rest();
 ```
+
 ### Available methods
 
 * **doGet**
@@ -32,7 +39,21 @@ $rest = new Rest();
      * @param $expectedCode string | integer
      */
     public function doPost($data,$headers,$url,$expectedCode, $verbose=false)
-```  
+```
+
+* **doPut**
+
+```php
+    /**
+     * Method to make a HTTP PUT request
+     * @param $data array
+     * @param $headers array
+     * @param $url string
+     * @param $expectedCode string | integer
+     */
+    public function doPut($data,$headers,$url,$expectedCode, $verbose=false) {
+```
+
 * **doDelete**
 
 ```php
@@ -46,6 +67,7 @@ $rest = new Rest();
      */
     public function doDelete($headers,$url,$expectedCode, $data = [],$verbose=false)
 ```
+
 * **doPatch**
 
 ```php
@@ -58,6 +80,7 @@ $rest = new Rest();
      */
     public function doPatch($data,$headers,$url,$expectedCode, $verbose=false)
 ```
+
 * **doDelete**
 
 ```php
@@ -114,6 +137,24 @@ public function testPost()
         @$response = $rest->doPost($data, [],'https://reqres.in/api/users',201);
         
         $this->assertStringContainsString('createdAt', $response);
+    }
+```
+
+### Testing a HTTP PUT request
+
+```php
+    public function testPut()
+    {
+        $rest = new Rest();
+
+        $data = [
+            'name' => 'morpheus',
+            'job' => 'general'
+        ];
+        
+        @$response = $rest->doPut($data, [],'https://reqres.in/api/users/2',201);
+        
+        $this->assertStringContainsString('updatedAt', $response);
     }
 ```
 

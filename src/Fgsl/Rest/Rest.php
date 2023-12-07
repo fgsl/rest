@@ -118,6 +118,31 @@ class Rest {
     }
 
     /**
+     * Method to make a HTTP PUT request
+     * @param $data array
+     * @param $headers array
+     * @param $url string
+     * @param $expectedCode string | integer
+     */
+    public function doPut($data,$headers,$url,$expectedCode, $verbose=false) {
+        if ($verbose) { echo str_repeat('=', 80) . "\n"; }
+        $fields = '';
+        foreach($data as $key => $value){
+            $fields .= "$key=$value&";
+        }
+        $fields = substr($fields,0,-1);
+
+        $data = [ CURLOPT_CUSTOMREQUEST => 'PUT', CURLOPT_POSTFIELDS => $fields ];
+
+        $response = $this->tryRequest($url,$headers,$data, $verbose);
+
+        $this->assertResponse($expectedCode,$response,$verbose,$data);
+        
+        return $response;
+    }
+
+
+    /**
      * @param $url string
      * @param $headers array
      * @param $data array
