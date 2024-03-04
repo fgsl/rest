@@ -25,7 +25,7 @@ class Rest {
      * Method to make a HTTP GET request
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doGet($headers,$url,$expectedCode, $data = [],$verbose=false){
         if ($verbose) { echo str_repeat('=',80) . "\n"; }
@@ -47,7 +47,7 @@ class Rest {
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPost($data,$headers,$url,$expectedCode, $verbose=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
@@ -70,7 +70,7 @@ class Rest {
      * Method to make a HTTP DELETE request
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      * @param $data array
      * @param $verbose boolean
      */
@@ -98,7 +98,7 @@ class Rest {
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPatch($data,$headers,$url,$expectedCode, $verbose=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
@@ -122,7 +122,7 @@ class Rest {
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPut($data,$headers,$url,$expectedCode, $verbose=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
@@ -171,23 +171,38 @@ class Rest {
     }
 
     /**
-     * @param $expectedCode integer
+     * @param $expectedCode integer | string | array
      * @param $response string
      * @param $verbose boolean
      * @param $data array
      */
     protected function assertResponse($expectedCode,$response,$verbose,$data)
     {
-        if (Http::getLastResponseCode() != $expectedCode) {
+
+        if ($this->isResponseCodeExpectable($expectedCode)) {
+            if ($verbose) { echo "Response Status OK for {$this->baseUrl}\n"; }
+        }
+        else {
             if ($verbose) { echo "Expected $expectedCode Received " . Http::getLastResponseCode() . "\n"; }
             if ($verbose) { echo isset($response) ? "$response\n" : ''; }
             $this->requestErrors[$this->baseUrl] = Http::getLastResponseCode();
             $this->dataErrors[$this->baseUrl] = $this->printData($data);
             $this->methodErrors[$this->baseUrl] = $this->method;
-        } else {
-            if ($verbose) { echo "Response Status OK for {$this->baseUrl}\n"; } 
         }
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
+    }
+
+    protected function isResponseCodeExpectable($expectedCode)
+    {
+        if (is_array($expectedCode)){
+            foreach($expectedCode as $code){
+                if (Http::getLastResponseCode() == $code) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return Http::getLastResponseCode() == $expectedCode;
     }
 
     private function setMethod(array $data)
