@@ -29,11 +29,15 @@ class RestTest extends TestCase
         
         $this->assertStringContainsString('Sincronismo', $response);
 
+        @$response = $rest->doGet([],'http://www.horalegalbrasil.mct.on.br/SincronismoPublico.html',[200,201]);
+        
+        $this->assertStringContainsString('Sincronismo', $response);
+
         @$response = $rest->doGet([],'http://www.horalegalbrasil.mct.on.br/SincronismoPublico.html',500);
         
         $this->assertEquals(1,count($rest->requestErrors));
 
-        $this->assertEquals(2,$rest->requestCounter);
+        $this->assertEquals(3,$rest->requestCounter);
     }
 
     public function testPost()
@@ -62,6 +66,10 @@ class RestTest extends TestCase
         @$response = $rest->doPut($data, [],'https://reqres.in/api/users/2',201);
         
         $this->assertStringContainsString('updatedAt', $response);
+
+        @$response = $rest->doPut($data, [],'https://reqres.in/api/users/2',[200,201]);
+        
+        $this->assertStringContainsString('updatedAt', $response);
     }
 
     public function testPatch()
@@ -76,6 +84,10 @@ class RestTest extends TestCase
         @$response = $rest->doPatch($data, [], 'https://reqres.in/api/users/2', 200);
         
         $this->assertStringContainsString('updatedAt', $response);
+
+        @$response = $rest->doPatch($data, [], 'https://reqres.in/api/users/2', [200,201]);
+        
+        $this->assertStringContainsString('updatedAt', $response);
     }
 
     public function testDelete()
@@ -83,6 +95,10 @@ class RestTest extends TestCase
         $rest = new Rest();
         
         @$response = $rest->doDelete([],'https://reqres.in/api/users/2',204);
+
+        $this->assertEquals(0,count($rest->requestErrors));
+
+        @$response = $rest->doDelete([],'https://reqres.in/api/users/2',[200,204]);
 
         $this->assertEquals(0,count($rest->requestErrors));
     }

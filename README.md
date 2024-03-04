@@ -24,7 +24,7 @@ $rest = new Rest();
      * Method to make a HTTP GET request
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doGet($headers,$url,$expectedCode, $data = [],$verbose=false)
 ```
@@ -36,7 +36,7 @@ $rest = new Rest();
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPost($data,$headers,$url,$expectedCode, $verbose=false)
 ```
@@ -49,7 +49,7 @@ $rest = new Rest();
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPut($data,$headers,$url,$expectedCode, $verbose=false) {
 ```
@@ -61,7 +61,7 @@ $rest = new Rest();
      * Method to make a HTTP DELETE request
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      * @param $data array
      * @param $verbose boolean
      */
@@ -76,7 +76,7 @@ $rest = new Rest();
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPatch($data,$headers,$url,$expectedCode, $verbose=false)
 ```
@@ -89,7 +89,7 @@ $rest = new Rest();
      * @param $data array
      * @param $headers array
      * @param $url string
-     * @param $expectedCode string | integer
+     * @param $expectedCode string | integer | array
      */
     public function doPatch($data,$headers,$url,$expectedCode, $verbose=false)
 ```
@@ -187,4 +187,11 @@ public function testDelete()
         $this->assertEquals(0,count($rest->requestErrors));
     }
 }
+```
+You can allow more than one HTTP status code as a valid response. The code snippet below shows a request that allows 200 and 201 status code as valid responses.
+
+```php
+        @$response = $rest->doGet([],'http://www.horalegalbrasil.mct.on.br/SincronismoPublico.html',[200,201]);
+        
+        $this->assertStringContainsString('Sincronismo', $response);
 ```
