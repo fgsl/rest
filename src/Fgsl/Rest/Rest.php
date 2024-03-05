@@ -50,14 +50,22 @@ class Rest {
      * @param $expectedCode string | integer | array
      */
     public function doPost($data,$headers,$url,$expectedCode, $verbose=false) {
+        $json = false;
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         $fields = '';
         foreach($data as $key => $value){
+            if (is_object($value)){
+                $json = true;
+                $value = json_encode($value);
+            }
             $fields .= "$key=$value&";
         }
         $fields = substr($fields,0,-1);
 
         $data = [ CURLOPT_POST => true, CURLOPT_POSTFIELDS => $fields ];
+        if ($json){
+            $data[CURLOPT_HTTPHEADER] = ['Content-Type:application/json'];
+        }
 
         $response = $this->tryRequest($url,$headers,$data, $verbose);
 
@@ -101,9 +109,14 @@ class Rest {
      * @param $expectedCode string | integer | array
      */
     public function doPatch($data,$headers,$url,$expectedCode, $verbose=false) {
+        $json = false;
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         $fields = '';
         foreach($data as $key => $value){
+            if (is_object($value)){
+                $json = true;
+                $value = json_encode($value);
+            }
             $fields .= "$key=$value&";
         }
         $fields = substr($fields,0,-1);
