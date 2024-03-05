@@ -236,6 +236,9 @@ class Rest {
             if (is_object($value)){
                 $value = json_encode($value);
             }
+            if (is_array($value)){
+                $value = implode(',',$value);
+            }
             $text .= "$key: $value\n";
         }
         return $text;
