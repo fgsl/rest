@@ -233,6 +233,9 @@ class Rest {
     {
         $text = "\n";
         foreach ($data as $key => $value){
+            if (is_object($value)){
+                $value = json_encode($value);
+            }
             $text .= "$key: $value\n";
         }
         return $text;
