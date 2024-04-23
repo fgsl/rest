@@ -11,6 +11,7 @@ namespace Fgsl\Test;
 
 use Fgsl\Rest\Rest;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * 
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @subpackage Test
  * @covers Rest
  */
+#[CoversClass('Rest')]
 class RestTest extends TestCase
 {
     public function testGet()
