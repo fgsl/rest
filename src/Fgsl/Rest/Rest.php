@@ -26,8 +26,10 @@ class Rest {
      * @param $headers array
      * @param $url string
      * @param $expectedCode string | integer | array
+     * @param $data array optional way to send arguments
+     * @param $verbose boolean
      */
-    public function doGet($headers,$url,$expectedCode, $data = [],$verbose=false){
+    public function doGet(array $headers,string $url,$expectedCode,array $data = [],bool $verbose=false){
         if ($verbose) { echo str_repeat('=',80) . "\n"; }
         if (count($data) > 0){
             $url .= '?';
@@ -36,6 +38,7 @@ class Rest {
             }
             $url = substr($url,0,-1);
         }
+        $data = [];
         $response = $this->tryRequest($url,$headers,$data, $verbose);
 
         $this->assertResponse($expectedCode,$response,$verbose,$data);
@@ -48,8 +51,9 @@ class Rest {
      * @param $headers array
      * @param $url string
      * @param $expectedCode string | integer | array
+     * @param $verbose boolean
      */
-    public function doPost($data,$headers,$url,$expectedCode, $verbose=false) {
+    public function doPost(array $data,array $headers,string $url,$expectedCode,bool $verbose=false) {
         $json = false;
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         $fields = '';
@@ -82,7 +86,7 @@ class Rest {
      * @param $data array
      * @param $verbose boolean
      */
-    public function doDelete($headers,$url,$expectedCode, $data = [],$verbose=false){
+    public function doDelete(array $headers,string $url,$expectedCode,array $data = [],bool $verbose=false){
         if ($verbose) { echo str_repeat('=',80) . "\n"; }
         if (count($data) > 0){
             $url .= '?';
@@ -107,8 +111,9 @@ class Rest {
      * @param $headers array
      * @param $url string
      * @param $expectedCode string | integer | array
+     * @param $verbose boolean
      */
-    public function doPatch($data,$headers,$url,$expectedCode, $verbose=false) {
+    public function doPatch(array $data,array $headers,string $url,$expectedCode, bool $verbose=false) {
         $json = false;
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         $fields = '';
@@ -136,8 +141,9 @@ class Rest {
      * @param $headers array
      * @param $url string
      * @param $expectedCode string | integer | array
+     * @param $verbose boolean
      */
-    public function doPut($data,$headers,$url,$expectedCode, $verbose=false) {
+    public function doPut(array $data,array $headers,string $url,$expectedCode, bool $verbose=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         $fields = '';
         foreach($data as $key => $value){
@@ -161,7 +167,7 @@ class Rest {
      * @param $data array
      * @param $verbose boolean
      */
-    protected function tryRequest($url,$headers,$data,$verbose): string
+    protected function tryRequest(string $url,array $headers,array $data,bool $verbose): string
     {
         $this->setMethod($data);
 
@@ -189,7 +195,7 @@ class Rest {
      * @param $verbose boolean
      * @param $data array
      */
-    protected function assertResponse($expectedCode,$response,$verbose,$data)
+    protected function assertResponse($expectedCode,string $response,bool $verbose,array $data)
     {
 
         if ($this->isResponseCodeExpectable($expectedCode)) {
