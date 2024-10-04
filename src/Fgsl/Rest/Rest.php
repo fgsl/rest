@@ -52,9 +52,9 @@ class Rest {
      * @param $url string
      * @param $expectedCode string | integer | array
      * @param $verbose boolean
+     * @param $json boolean
      */
-    public function doPost(array $data,array $headers,string $url,$expectedCode,bool $verbose=false) {
-        $json = false;
+    public function doPost(array $data,array $headers,string $url,$expectedCode,bool $verbose=false, $json=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         $fields = '';
         foreach($data as $key => $value){
