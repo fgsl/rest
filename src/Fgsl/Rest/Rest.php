@@ -150,7 +150,7 @@ class Rest {
      * @param $json boolean
      * @param $encodeJson boolean
      */
-    public function doPut(array $data,array $headers,string $url,$expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false) {
+    public function doPut(array $data, array $headers, string $url, $expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
         if ($encodeJson){
             $fields = json_encode($data);
