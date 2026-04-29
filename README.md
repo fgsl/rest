@@ -17,6 +17,8 @@ $rest = new Rest();
 
 ### Available methods
 
+General advice: The argument `$verbose` is for debugging. It enables output (a lot of output) for the commands.
+
 * **doGet**
 
 ```php
@@ -44,6 +46,10 @@ $rest = new Rest();
     public function doPost(array $data, array $headers, string $url, $expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false)
 ```
 
+The argument `$json`, when it is true, enables the header `Content-Type: application/json`.
+
+The argument `$encodeJson`, when it is true, converts $data to string using `json_encode()` function. Otherwise, the array is converted in a string with the fields as pairs `key=value` united by `&`.
+
 * **doPut**
 
 ```php
@@ -53,8 +59,11 @@ $rest = new Rest();
      * @param $headers array
      * @param $url string
      * @param $expectedCode string | integer | array
+     * @param $verbose boolean
+     * @param $json boolean
+     * @param $encodeJson boolean
      */
-    public function doPut($data,$headers,$url,$expectedCode, $verbose=false) {
+    public function doPut(array $data, array $headers, string $url, $expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false) {
 ```
 
 * **doDelete**
