@@ -18,7 +18,6 @@
 	"require" : {
 		"php" : ">=8.2",
 		"ext-curl": "*",
-		"phpunit/phpunit" : "^10.4",
 		"fgsl/http": "^1.4"
 	},
 	"config" : {
