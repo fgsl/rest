@@ -31,14 +31,17 @@ $rest = new Rest();
 * **doPost**
 
 ```php
-/**
+    /**
      * Method to make a HTTP POST request
      * @param $data array
      * @param $headers array
      * @param $url string
      * @param $expectedCode string | integer | array
+     * @param $verbose boolean
+     * @param $json boolean
+     * @param $encodeJson boolean
      */
-    public function doPost($data,$headers,$url,$expectedCode, $verbose=false)
+    public function doPost(array $data, array $headers, string $url, $expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false)
 ```
 
 * **doPut**

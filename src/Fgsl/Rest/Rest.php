@@ -53,18 +53,23 @@ class Rest {
      * @param $expectedCode string | integer | array
      * @param $verbose boolean
      * @param $json boolean
+     * @param $encodeJson boolean
      */
-    public function doPost(array $data,array $headers,string $url,$expectedCode,bool $verbose=false, $json=false) {
+    public function doPost(array $data, array $headers, string $url, $expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
-        $fields = '';
-        foreach($data as $key => $value){
-            if (is_object($value)){
-                $json = true;
-                $value = json_encode($value);
+        if ($encodeJson) {
+            $fields = json_encode($data);
+        } else {
+            $fields = '';
+            foreach($data as $key => $value){
+                if (is_object($value)){
+                    $json = true;
+                    $value = json_encode($value);
+                }
+                $fields .= "$key=$value&";
             }
-            $fields .= "$key=$value&";
-        }
-        $fields = substr($fields,0,-1);
+            $fields = substr($fields,0,-1);
+        }    
 
         $data = [ CURLOPT_POST => true, CURLOPT_POSTFIELDS => $fields ];
         if ($json){
@@ -142,16 +147,24 @@ class Rest {
      * @param $url string
      * @param $expectedCode string | integer | array
      * @param $verbose boolean
+     * @param $json boolean
+     * @param $encodeJson boolean
      */
-    public function doPut(array $data,array $headers,string $url,$expectedCode, bool $verbose=false) {
+    public function doPut(array $data,array $headers,string $url,$expectedCode, bool $verbose=false, bool $json=false, bool $encodeJson=false) {
         if ($verbose) { echo str_repeat('=', 80) . "\n"; }
-        $fields = '';
-        foreach($data as $key => $value){
-            $fields .= "$key=$value&";
+        if ($encodeJson){
+            $fields = json_encode($data);
+        } else {
+            $fields = '';
+            foreach($data as $key => $value){
+                $fields .= "$key=$value&";
+            }
+            $fields = substr($fields,0,-1);
         }
-        $fields = substr($fields,0,-1);
-
         $data = [ CURLOPT_CUSTOMREQUEST => 'PUT', CURLOPT_POSTFIELDS => $fields ];
+        if ($json){
+            $data[CURLOPT_HTTPHEADER] = ['Content-Type:application/json'];
+        }
 
         $response = $this->tryRequest($url,$headers,$data, $verbose);
 

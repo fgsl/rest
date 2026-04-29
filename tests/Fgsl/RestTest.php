@@ -22,6 +22,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass('Rest')]
 class RestTest extends TestCase
 {
+    private array $headers = [];
+
+    public function setUp(): void
+    {
+        $config = require 'headers.php';
+        $key = $config['x-api-key'];
+        $this->headers[] = 'x-api-key:' . strrev($key);
+    }
+
     public function testGet()
     {
         $rest = new Rest();
@@ -51,7 +60,7 @@ class RestTest extends TestCase
             'job' => 'leader'
         ];
         
-        @$response = $rest->doPost($data, [],'https://reqres.in/api/users',201);
+        @$response = $rest->doPost($data, $this->headers,'https://reqres.in/api/users',201);
         
         $this->assertStringContainsString('createdAt', $response);
     }
@@ -65,11 +74,11 @@ class RestTest extends TestCase
             'job' => 'general'
         ];
         
-        @$response = $rest->doPut($data, [],'https://reqres.in/api/users/2',201);
+        @$response = $rest->doPut($data, $this->headers,'https://reqres.in/api/users/2',201);
         
         $this->assertStringContainsString('updatedAt', $response);
 
-        @$response = $rest->doPut($data, [],'https://reqres.in/api/users/2',[200,201]);
+        @$response = $rest->doPut($data, $this->headers,'https://reqres.in/api/users/2',[200,201]);
         
         $this->assertStringContainsString('updatedAt', $response);
     }
@@ -83,11 +92,11 @@ class RestTest extends TestCase
             'job' => 'zion resident'
         ];
         
-        @$response = $rest->doPatch($data, [], 'https://reqres.in/api/users/2', 200);
+        @$response = $rest->doPatch($data, $this->headers, 'https://reqres.in/api/users/2', 200);
         
         $this->assertStringContainsString('updatedAt', $response);
 
-        @$response = $rest->doPatch($data, [], 'https://reqres.in/api/users/2', [200,201]);
+        @$response = $rest->doPatch($data, $this->headers, 'https://reqres.in/api/users/2', [200,201]);
         
         $this->assertStringContainsString('updatedAt', $response);
     }
@@ -96,11 +105,11 @@ class RestTest extends TestCase
     {
         $rest = new Rest();
         
-        @$response = $rest->doDelete([],'https://reqres.in/api/users/2',204);
+        @$response = $rest->doDelete($this->headers,'https://reqres.in/api/users/2',204);
 
         $this->assertEquals(0,count($rest->requestErrors));
 
-        @$response = $rest->doDelete([],'https://reqres.in/api/users/2',[200,204]);
+        @$response = $rest->doDelete($this->headers,'https://reqres.in/api/users/2',[200,204]);
 
         $this->assertEquals(0,count($rest->requestErrors));
     }
